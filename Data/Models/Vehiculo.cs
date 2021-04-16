@@ -18,7 +18,7 @@ namespace Sistema_Gestion_Alquiler_Vehiculos.Data.Models
 
         public string Modelo { get; set; }
 
-        public string Anio { get; set; }
+        public int Anio { get; set; }
 
         public string Color { get; set; }
 
@@ -38,9 +38,9 @@ namespace Sistema_Gestion_Alquiler_Vehiculos.Data.Models
 
         public string Foto { get; set; }
 
-        public string Latitud { get; set; }
+        public double Latitud { get; set; }
 
-        public string Longitud { get; set; }
+        public double Longitud { get; set; }
 
         public bool Disponible { get; set; }
 

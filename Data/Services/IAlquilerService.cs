@@ -19,6 +19,11 @@ namespace Sistema_Gestion_Alquiler_Vehiculos.Data.Services
         Task<bool> SaveVehiculo(Vehiculo vehiculo);
 
 
+        Task<List<TipoVehiculo>> GetTiposVehiculo();
+
+        Task<List<TipoSangre>> GetTiposSangre();
+
+
         Task<bool> AddCliente(Cliente cliente);
 
         Task<bool> UpdateCliente(Cliente cliente);

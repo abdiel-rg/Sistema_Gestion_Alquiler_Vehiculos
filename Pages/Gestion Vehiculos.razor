@@ -1,0 +1,118 @@
+﻿@page "/gvehiculo"
+@inject IAlquilerService DB
+
+<h3>Gestion Vehiculos</h3>
+
+<EditForm Model="vehiculo" >
+    <DataAnnotationsValidator />
+    <div class="container-fluid">
+        <div class="row">
+            <div class="col-4">
+
+                <label class="form-label">Marca</label>
+                <div class="input-group mb-3">
+                    <InputText class="form-control" @bind-Value="@vehiculo.Marca"></InputText>
+                </div>
+
+                <label class="form-label">Modelo</label>
+                <div class="input-group mb-3">
+                    <InputText class="form-control" @bind-Value="@vehiculo.Modelo"></InputText>
+                </div>
+
+                <label class="form-label">Año</label>
+                <div class="input-group mb-3">
+                    <InputNumber class="form-control" @bind-Value="@vehiculo.Anio"
+                                 min="1900"
+                                 max="2099"
+                                 step="1" />
+                </div>
+
+                <label class="form-label">Color</label>
+                <div class="input-group mb-3">
+                    <InputText class="form-control" @bind-Value="@vehiculo.Color"></InputText>
+                </div>
+
+                <label class="form-label">Precio por Día</label>
+                <div class="input-group mb-3">
+                    <InputNumber class="form-control" @bind-Value="@vehiculo.PrecioPorDia"></InputNumber>
+                </div>
+
+                <label class="form-label">Tipo de Vehículo</label>
+                <div class="input-group mb-3">
+                    <InputSelect @bind-Value="@vehiculo.TipoID" class="form-control">
+                        @foreach(var tp in @tiposVehiculo)
+                        {
+                            <option value="@tp.ID">@tp.Nombre</option>
+                        }
+                    </InputSelect>
+                </div>
+
+                <label class="form-label">Capacidad de Carga</label>
+                <div class="input-group mb-3">
+                    <InputNumber class="form-control" @bind-Value="@vehiculo.CapacidadCarga"></InputNumber>
+                </div>
+
+                <label class="form-label">Cantidad de Pasajeros</label>
+                <div class="input-group mb-3">
+                    <InputNumber class="form-control" @bind-Value="@vehiculo.Pasajeros"></InputNumber>
+                </div>
+
+                <label class="form-label">Número de Seguro</label>
+                <div class="input-group mb-3">
+                    <InputText class="form-control" @bind-Value="vehiculo.NumeroSeguro"></InputText>
+                </div>
+
+                <label class="form-label">Foto del Auto</label>
+                <div class="input-group mb-3">
+                    <!--InputText class="form-control"></InputText-->
+                </div>
+
+                <div class="col">
+                    <label class="form-label">Seleccione su ubicación en el mapa</label>
+                    <RadzenGoogleMap Center="Center"
+                                     Data="markers"
+                                     MapClick="SetMarker" />
+                </div>
+
+
+            </div>
+        </div>
+    </div>
+</EditForm>
+
+@code {
+    Vehiculo vehiculo = new()
+    {
+        Anio = DateTime.Now.Year
+    };
+    List<TipoVehiculo> tiposVehiculo = new();
+
+
+    GoogleMapPosition Center = new()
+    {
+        Lat = 18.903088,
+        Lng = -70.163137
+    };
+
+    List<RadzenGoogleMapMarker> markers = new();
+
+#pragma warning disable BL0005
+
+    void SetMarker(GoogleMapClickEventArgs args)
+    {
+        Center = args.Position;
+
+        markers.Clear();
+        markers.Add(
+            new() { Position = args.Position }
+        );
+
+        vehiculo.Latitud = args.Position.Lat;
+        vehiculo.Longitud = args.Position.Lng;
+    }
+
+    protected override async Task OnParametersSetAsync()
+    {
+        tiposVehiculo = await DB.GetTiposVehiculo();
+    }
+}

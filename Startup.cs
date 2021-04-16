@@ -15,6 +15,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Sistema_Gestion_Alquiler_Vehiculos.Data.Services;
 
 namespace Sistema_Gestion_Alquiler_Vehiculos
 {
@@ -44,6 +45,7 @@ namespace Sistema_Gestion_Alquiler_Vehiculos
             services.AddServerSideBlazor();
             services.AddScoped<AuthenticationStateProvider, RevalidatingIdentityAuthenticationStateProvider<IdentityUser>>();
             services.AddDatabaseDeveloperPageExceptionFilter();
+            services.AddScoped<IAlquilerService, AlquilerService>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
