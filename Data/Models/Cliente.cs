@@ -20,10 +20,10 @@ namespace Sistema_Gestion_Alquiler_Vehiculos.Data.Models
         [EmailAddress]
         public string Correo { get; set; }
 
+        public bool Disponible { get; set; }
 
         public string Licencia { get; set; }
         public string FotoLicencia { get; set; }
-
 
         public string Nacionalidad { get; set; }
 
