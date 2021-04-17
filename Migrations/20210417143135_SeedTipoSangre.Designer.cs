@@ -2,15 +2,17 @@
 using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Sistema_Gestion_Alquiler_Vehiculos.Data;
 
 namespace Sistema_Gestion_Alquiler_Vehiculos.Migrations
 {
     [DbContext(typeof(SGAVContext))]
-    partial class SGAVContextModelSnapshot : ModelSnapshot
+    [Migration("20210417143135_SeedTipoSangre")]
+    partial class SeedTipoSangre
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder

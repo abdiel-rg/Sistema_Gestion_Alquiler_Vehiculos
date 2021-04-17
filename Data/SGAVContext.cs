@@ -28,6 +28,17 @@ namespace Sistema_Gestion_Alquiler_Vehiculos.Data
             // Customize the ASP.NET Identity model and override the defaults if needed.
             // For example, you can rename the ASP.NET Identity table names and more.
             // Add your customizations after calling base.OnModelCreating(builder);
+
+            builder.Entity<TipoSangre>().HasData(
+                new TipoSangre() { ID = 1, Nombre = "O-" },
+                new TipoSangre() { ID = 2, Nombre = "O+" },
+                new TipoSangre() { ID = 3, Nombre = "A-" },
+                new TipoSangre() { ID = 4, Nombre = "A+" },
+                new TipoSangre() { ID = 5, Nombre = "B-" },
+                new TipoSangre() { ID = 6, Nombre = "B+" },
+                new TipoSangre() { ID = 7, Nombre = "AB-" },
+                new TipoSangre() { ID = 8, Nombre = "AB+" }
+            );
         }
 
     }
