@@ -1,7 +1,78 @@
 ﻿@page "/gcliente"
+@inject IAlquilerService Db
 
 <h3>Gestion Clientes</h3>
 
-@code {
+<EditForm Model="cliente">
+    <DataAnnotationsValidator/>
+    <div class="container-fluid">
+        <div class="row">
+            <div class="col-4">
+                <label class="form-label">Cedula</label>
+                <div class="input-group mb-3">
+                    <InputText class="form-control" @bind-Value="@cliente.Cedula"></InputText>
+                </div>
+            </div>
 
+            <div class="col-4">
+                <label class="form-label">Nombre</label>
+                <div class="input-group mb-3">
+                    <InputText class="form-control" @bind-Value="@cliente.Nombre"></InputText>
+                </div>
+            </div>
+
+            <div class="col-4">
+                <label class="form-label">Apellido</label>
+                <div class="input-group mb-3">
+                    <InputText class="form-control" @bind-Value="@cliente.Apellido"></InputText>
+                </div>
+            </div>
+
+            <div class="col-4">
+                <label class="form-label">Correo</label>
+                <div class="input-group mb-3">
+                    <InputText class="form-control" @bind-Value="@cliente.Correo"></InputText>
+                </div>
+            </div>
+
+            <div class="col-4">
+                <label class="form-label">Licencia</label>
+                <div class="input-group mb-3">
+                    <InputText class="form-control" @bind-Value="@cliente.Licencia"></InputText>
+                </div>
+            </div>
+
+            <div class="col-4">
+                <label class="form-label">Nacionalidad</label>
+                <div class="input-group mb-3">
+                    <InputText class="form-control" @bind-Value="@cliente.Nacionalidad"></InputText>
+                </div>
+            </div>
+
+            <div class="col-4">
+                <label class="form-label">Tipo de Sangre</label>
+                <div class="input-group mb-3">
+                    <InputNumber class="form-control" @bind-Value="@cliente.TipoSangreID"></InputNumber>
+                </div>
+            </div>
+
+            <div class="col-4">
+                <label class="form-label">Foto</label>
+                <div class="input-group mb-3">
+                    <InputText class="form-control" @bind-Value="@cliente.Foto"></InputText>
+                </div>
+            </div>
+
+            <div class="col-4">
+                <label class="form-label">Foto de Licencia</label>
+                <div class="input-group mb-3">
+                    <InputText class="form-control" @bind-Value="@cliente.FotoLicencia"></InputText>
+                </div>
+            </div>
+        </div>
+    </div>
+        </EditForm>
+
+@code {
+    Cliente cliente = new();
 }
