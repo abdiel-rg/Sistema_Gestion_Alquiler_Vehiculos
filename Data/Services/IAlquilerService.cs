@@ -37,6 +37,10 @@ namespace Sistema_Gestion_Alquiler_Vehiculos.Data.Services
 
         Task<bool> CreateReserva(Reserva reserva);
 
+        Task<List<Reserva>> GetAllReservas();
+
+        Task<List<Vehiculo>> GetReservasFromDates(DateTime FechaI, DateTime FechaF); 
+
 
         Task<bool> CreateFactura(Factura factura);
 
