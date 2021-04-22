@@ -48,3 +48,8 @@ a, .btn-link {
         right: 0.75rem;
         top: 0.5rem;
     }
+
+.placeholder-image {
+    width: 15vw;
+    height: 15vw;
+}

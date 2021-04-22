@@ -1,78 +1,105 @@
 ﻿@page "/gcliente"
-@inject IAlquilerService Db
+@using Microsoft.Extensions.Configuration;
+@inject IAlquilerService DB
+@inject IFileService FileService
+@inject IConfiguration Configuration
 
 <h3>Gestion Clientes</h3>
 
 <EditForm Model="cliente">
-    <DataAnnotationsValidator/>
+    <DataAnnotationsValidator />
     <div class="container-fluid">
         <div class="row">
-            <div class="col-4">
+
+            <div class="col-3">
+                <img src="@(cliente.Foto ?? placeholderImage)"
+                     class="placeholder-image" />
+                <div class="input-group mt-3 mb-3">
+                    <InputFile OnChange="SetFotoCliente" class="form-control-file" @bind-Value="@cliente.Foto" accept="image/*" />
+                </div>
+            </div>
+
+            <div class="col-2">
                 <label class="form-label">Cedula</label>
                 <div class="input-group mb-3">
                     <InputText class="form-control" @bind-Value="@cliente.Cedula"></InputText>
                 </div>
-            </div>
 
-            <div class="col-4">
                 <label class="form-label">Nombre</label>
                 <div class="input-group mb-3">
                     <InputText class="form-control" @bind-Value="@cliente.Nombre"></InputText>
                 </div>
-            </div>
 
-            <div class="col-4">
                 <label class="form-label">Apellido</label>
                 <div class="input-group mb-3">
                     <InputText class="form-control" @bind-Value="@cliente.Apellido"></InputText>
                 </div>
             </div>
 
-            <div class="col-4">
+            <div class="col-2">
                 <label class="form-label">Correo</label>
                 <div class="input-group mb-3">
                     <InputText class="form-control" @bind-Value="@cliente.Correo"></InputText>
                 </div>
+
+                <label class="form-label">Nacionalidad</label>
+                <div class="input-group mb-3">
+                    <InputText class="form-control" @bind-Value="@cliente.Nacionalidad"></InputText>
+                </div>
+
+                <label class="form-label">Tipo de Sangre</label>
+                <div class="input-group mb-3">
+                    <InputSelect class="form-control" @bind-Value="@cliente.TipoSangreID">
+                        <option value=""></option>
+                        @foreach (var ts in tiposSangre)
+                        {
+                            <option value="@ts.ID">@ts.Nombre</option>
+                        }
+                    </InputSelect>
+                </div>
             </div>
 
-            <div class="col-4">
+            <div class="col-3">
+                <img src="@(cliente.FotoLicencia ?? placeholderImage)"
+                     class="placeholder-image" />
+                <div class="input-group mt-3 mb-3">
+                    <InputFile OnChange="SetFotoLicencia" class="form-control-file" @bind-Value="@cliente.Foto" accept="image/*" />
+                </div>
+            </div>
+
+            <div class="col-2">
                 <label class="form-label">Licencia</label>
                 <div class="input-group mb-3">
                     <InputText class="form-control" @bind-Value="@cliente.Licencia"></InputText>
                 </div>
             </div>
-
-            <div class="col-4">
-                <label class="form-label">Nacionalidad</label>
-                <div class="input-group mb-3">
-                    <InputText class="form-control" @bind-Value="@cliente.Nacionalidad"></InputText>
-                </div>
-            </div>
-
-            <div class="col-4">
-                <label class="form-label">Tipo de Sangre</label>
-                <div class="input-group mb-3">
-                    <InputNumber class="form-control" @bind-Value="@cliente.TipoSangreID"></InputNumber>
-                </div>
-            </div>
-
-            <div class="col-4">
-                <label class="form-label">Foto</label>
-                <div class="input-group mb-3">
-                    <InputText class="form-control" @bind-Value="@cliente.Foto"></InputText>
-                </div>
-            </div>
-
-            <div class="col-4">
-                <label class="form-label">Foto de Licencia</label>
-                <div class="input-group mb-3">
-                    <InputText class="form-control" @bind-Value="@cliente.FotoLicencia"></InputText>
-                </div>
-            </div>
         </div>
     </div>
-        </EditForm>
+</EditForm>
 
 @code {
-    Cliente cliente = new();
+    string placeholderImage = string.Empty;
+    List<TipoSangre> tiposSangre = new();
+
+    Cliente cliente = new()
+    {
+        Foto = null,
+        FotoLicencia = null
+    };
+
+    private async Task SetFotoCliente(InputFileChangeEventArgs args)
+    {
+        cliente.Foto = await FileService.ToBase64StringAsync(args.File);
+    }
+
+    private async Task SetFotoLicencia(InputFileChangeEventArgs args)
+    {
+        cliente.FotoLicencia = await FileService.ToBase64StringAsync(args.File);
+    }
+
+    protected override async Task OnInitializedAsync()
+    {
+        placeholderImage = Configuration.GetValue<string>("PlaceholderImageURL");
+        tiposSangre = await DB.GetTiposSangre();
+    }
 }
