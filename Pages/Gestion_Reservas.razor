@@ -1,8 +1,99 @@
-﻿@page "/greservas"
-
+﻿@page "/gestion_reservas"
+@page "/gestion_reservas/{ReservaID:int?}"
+@using Microsoft.Extensions.Configuration;
+@inject IAlquilerService DB
+@inject IFileService FileService
+@inject NavigationManager Nav
+@inject IConfiguration Configuration
 
 <h3>Gestion Reservas</h3>
 
-@code {
+<EditForm Model="reserva">
+    <DataAnnotationsValidator />
+    <div class="container-fluid">
+        <div class="row">
+            <div class="col-4">
 
+                <label class="form-label">Tipo de Vehículo</label>
+                <div class="input-group mb-3">
+                    <InputNumber @bind-Value="@reserva.VehiculoID" class="form-control" list="vehiculos_ids" min="1" />
+                    <datalist id="vehiculos_ids">
+                        @foreach (Vehiculo vehiculo in vehiculos)
+                        {
+                            <option value="@vehiculo.ID">@vehiculo.Marca @vehiculo.Modelo @vehiculo.Anio</option>
+                        }
+                    </datalist>
+                </div>
+
+                <label class="form-label">Cliente</label>
+                <div class="input-group mb-3">
+                    <InputText @bind-Value="@reserva.CedulaCliente" class="form-control" list="clientes_cedulas" />
+                    <datalist id="clientes_cedulas">
+                        @foreach (Cliente cliente in clientes)
+                        {
+                            <option value="@cliente.Cedula">@cliente.Nombre</option>
+                        }
+                    </datalist>
+                </div>
+
+                <label class="form-label">Fecha de Inicio:</label>
+                <div class="input-group mb-3">
+                    <InputDate class="form-control" @bind-Value="reserva.FechaInicio" />
+                </div>
+
+                <label class="form-label">Fecha de Fin:</label>
+                <div class="input-group mb-3">
+                    <InputDate class="form-control" @bind-Value="reserva.FechaFin" />
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="row">
+        <button class="@buttonStyle mx-auto">@buttonText</button>
+    </div>
+</EditForm>
+
+@code {
+    [Parameter]
+    public int? ReservaID { get; set; }
+
+    string placeholderImage = string.Empty;
+
+    private string buttonStyle { get; set; } = string.Empty;
+    private string buttonText { get; set; } = string.Empty;
+
+    Reserva reserva = new()
+    {
+        FechaInicio = DateTime.Today,
+        FechaFin = DateTime.Today.AddDays(1)
+    };
+
+    List<Cliente> clientes = new();
+    List<Vehiculo> vehiculos = new();
+
+    protected override async Task OnParametersSetAsync()
+    {
+        placeholderImage = Configuration.GetValue<string>("PlaceholderImageURL");
+        vehiculos = await DB.GetAllAvailableVehiculos();
+        clientes = await DB.GetAllAvailableClientes();
+
+        buttonStyle = "btn btn-primary";
+        buttonText = "Agregar";
+
+        if (ReservaID is null)
+        {
+            return;
+        }
+        else if (ReservaID <= 0)
+        {
+            Nav.NavigateTo("/gestion_reservas", forceLoad: true);
+        }
+        else
+        {
+            buttonStyle = "btn btn-success";
+            buttonText = "Editar";
+
+            reserva = (await DB.FindReserva((int)ReservaID))!;
+        }
+    }
 }

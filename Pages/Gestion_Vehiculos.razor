@@ -1,92 +1,99 @@
-﻿@page "/gvehiculo"
+﻿@page "/gestion_vehiculos"
+@page "/gestion_vehiculos/{VehiculoID:int?}"
+@using Microsoft.Extensions.Configuration;
 @inject IAlquilerService DB
+@inject IFileService FileService
+@inject IConfiguration Configuration
+@inject NavigationManager Nav
 
 <h3>Gestion Vehiculos</h3>
 
-<EditForm Model="vehiculo" >
+<EditForm Model="vehiculo">
     <DataAnnotationsValidator />
-    <div class="container-fluid">
-        <div class="row">
-            <div class="col-4">
-
-                <label class="form-label">Marca</label>
-                <div class="input-group mb-3">
-                    <InputText class="form-control" @bind-Value="@vehiculo.Marca"></InputText>
-                </div>
-
-                <label class="form-label">Modelo</label>
-                <div class="input-group mb-3">
-                    <InputText class="form-control" @bind-Value="@vehiculo.Modelo"></InputText>
-                </div>
-
-                <label class="form-label">Año</label>
-                <div class="input-group mb-3">
-                    <InputNumber class="form-control" @bind-Value="@vehiculo.Anio"
-                                 min="1900"
-                                 max="2099"
-                                 step="1" />
-                </div>
-
-                <label class="form-label">Color</label>
-                <div class="input-group mb-3">
-                    <InputText class="form-control" @bind-Value="@vehiculo.Color"></InputText>
-                </div>
-
-                <label class="form-label">Precio por Día</label>
-                <div class="input-group mb-3">
-                    <InputNumber class="form-control" @bind-Value="@vehiculo.PrecioPorDia"></InputNumber>
-                </div>
-
-                <label class="form-label">Tipo de Vehículo</label>
-                <div class="input-group mb-3">
-                    <InputSelect @bind-Value="@vehiculo.TipoID" class="form-control">
-                        @foreach(var tp in @tiposVehiculo)
-                        {
-                            <option value="@tp.ID">@tp.Nombre</option>
-                        }
-                    </InputSelect>
-                </div>
-
-                <label class="form-label">Capacidad de Carga</label>
-                <div class="input-group mb-3">
-                    <InputNumber class="form-control" @bind-Value="@vehiculo.CapacidadCarga"></InputNumber>
-                </div>
-
-                <label class="form-label">Cantidad de Pasajeros</label>
-                <div class="input-group mb-3">
-                    <InputNumber class="form-control" @bind-Value="@vehiculo.Pasajeros"></InputNumber>
-                </div>
-
-                <label class="form-label">Número de Seguro</label>
-                <div class="input-group mb-3">
-                    <InputText class="form-control" @bind-Value="vehiculo.NumeroSeguro"></InputText>
-                </div>
-
-                <label class="form-label">Foto del Auto</label>
-                <div class="input-group mb-3">
-                    <!--InputText class="form-control"></InputText-->
-                </div>
-
-                <div class="col">
-                    <label class="form-label">Seleccione su ubicación en el mapa</label>
-                    <RadzenGoogleMap Center="Center"
-                                     Data="markers"
-                                     MapClick="SetMarker" />
-                </div>
-
-
+    <div class="form-row">
+        <div class="col-3">
+            <img src="@(vehiculo.Foto ?? placeholderImage)"
+                 class="placeholder-image" />
+            <div class="input-group mb-3">
+                <InputFile OnChange="SetFotoVehiculo" class="form-control-file" @bind-Value="@vehiculo.Foto" accept="image/*" />
             </div>
         </div>
+        <div class="form-group col-md-4">
+            <label class="form-label">Marca</label>
+            <InputText class="form-control" @bind-Value="@vehiculo.Marca"></InputText>
+        </div>
+        <div class="form-group col-md-4">
+            <label class="form-label">Modelo</label>
+            <InputText class="form-control" @bind-Value="@vehiculo.Modelo"></InputText>
+        </div>
+        <div class="form-group col-md-2">
+            <label class="form-label">Año</label>
+            <InputNumber class="form-control" @bind-Value="@vehiculo.Anio"
+                         min="1900"
+                         max="2099"
+                         step="1" />
+        </div>
+        <div class="form-group col-md-2">
+            <label class="form-label">Color</label>
+            <InputText class="form-control" @bind-Value="@vehiculo.Color"></InputText>
+        </div>
+    </div>
+    <div class="form-row">
+        <div class="form-group col-md-2">
+            <label class="form-label">Precio por Día</label>
+            <InputNumber class="form-control" @bind-Value="@vehiculo.PrecioPorDia"></InputNumber>
+        </div>
+        <div class="form-group col-md-4">
+            <label class="form-label">Tipo de Vehículo</label>
+            <InputSelect @bind-Value="@vehiculo.TipoID" class="form-control">
+                @foreach (var tp in @tiposVehiculo)
+                {
+                    <option value="@tp.ID">@tp.Nombre</option>
+                }
+            </InputSelect>
+        </div>
+        <div class="form-group col-md-2">
+            <label class="form-label">Capacidad de Carga</label>
+            <InputNumber class="form-control" @bind-Value="@vehiculo.CapacidadCarga"></InputNumber>
+        </div>
+        <div class="form-group col-md-2">
+            <label class="form-label">Cantidad de Pasajeros</label>
+            <InputNumber class="form-control" @bind-Value="@vehiculo.Pasajeros"></InputNumber>
+        </div>
+        <div class="form-group col-md-4">
+            <label class="form-label">Número de Seguro</label>
+            <InputText class="form-control" @bind-Value="vehiculo.NumeroSeguro"></InputText>
+        </div>
+    </div>
+    <div class="col-3">
+        <label class="form-label">Seleccione su ubicación en el mapa</label>
+        <RadzenGoogleMap Center="Center"
+                         Data="markers"
+                         MapClick="SetMarker" />
+    </div>
+
+    <div class="row">
+        <button class="@buttonStyle mx-auto">@buttonText</button>
     </div>
 </EditForm>
 
 @code {
+    #nullable enable
+
+    [Parameter]
+    public int? VehiculoID { get; set; }
+
+    private string buttonStyle { get; set; } = string.Empty;
+    private string buttonText { get; set; } = string.Empty;
+
+    string placeholderImage = string.Empty;
+
     Vehiculo vehiculo = new()
     {
         Anio = DateTime.Now.Year
     };
-    List<TipoVehiculo> tiposVehiculo = new();
 
+    List<TipoVehiculo> tiposVehiculo = new();
 
     GoogleMapPosition Center = new()
     {
@@ -111,8 +118,33 @@
         vehiculo.Longitud = args.Position.Lng;
     }
 
+    public async Task SetFotoVehiculo(InputFileChangeEventArgs args)
+    {
+        vehiculo.Foto = await FileService.ToBase64StringAsync(args.File);
+    }
+
     protected override async Task OnParametersSetAsync()
     {
+        placeholderImage = Configuration.GetValue<string>("PlaceholderImageURL");
+
         tiposVehiculo = await DB.GetTiposVehiculo();
+
+        buttonStyle = "btn btn-primary";
+        buttonText = "Agregar";
+        if (VehiculoID is null)
+        {
+            return;
+        }
+        else if (VehiculoID <= 0)
+        {
+            Nav.NavigateTo("/gestion_vehiculos", forceLoad: true);
+        }
+        else
+        {
+            buttonStyle = "btn btn-success";
+            buttonText = "Editar";
+
+            vehiculo = (await DB.FindVehiculo((int)VehiculoID))!;
+        }
     }
 }

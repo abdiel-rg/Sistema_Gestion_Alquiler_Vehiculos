@@ -1,12 +1,13 @@
-﻿@page "/gcliente"
+﻿@page "/gestion_clientes"
+@page "/gestion_clientes/{ClienteCedula}"
 @using Microsoft.Extensions.Configuration;
 @inject IAlquilerService DB
 @inject IFileService FileService
 @inject IConfiguration Configuration
 
-<h3>Gestion Clientes</h3>
+<h3>Clientes</h3>
 
-<EditForm Model="cliente">
+<EditForm Model="cliente" OnValidSubmit="GuardarCliente">
     <DataAnnotationsValidator />
     <div class="container-fluid">
         <div class="row">
@@ -55,8 +56,7 @@
                         {
                             <option value="@ts.ID">@ts.Nombre</option>
                         }
-                    </InputSelect>
-                </div>
+                    </InputSelect>                </div>
             </div>
 
             <div class="col-3">
@@ -74,25 +74,37 @@
                 </div>
             </div>
         </div>
+
+        <div class="row">
+            <button class="@buttonStyle mx-auto">@buttonText</button>
+        </div>
     </div>
 </EditForm>
 
 @code {
+    [Parameter]
+    public string ClienteCedula { get; set; }
+
+    private string buttonStyle { get; set;}
+    private string buttonText { get; set;}
+
     string placeholderImage = string.Empty;
     List<TipoSangre> tiposSangre = new();
 
-    Cliente cliente = new()
+    public Cliente cliente = new()
     {
         Foto = null,
         FotoLicencia = null
     };
 
-    private async Task SetFotoCliente(InputFileChangeEventArgs args)
+    async Task GuardarCliente() => await DB.SaveCliente(cliente);
+
+    async Task SetFotoCliente(InputFileChangeEventArgs args)
     {
         cliente.Foto = await FileService.ToBase64StringAsync(args.File);
     }
 
-    private async Task SetFotoLicencia(InputFileChangeEventArgs args)
+    async Task SetFotoLicencia(InputFileChangeEventArgs args)
     {
         cliente.FotoLicencia = await FileService.ToBase64StringAsync(args.File);
     }
@@ -101,5 +113,25 @@
     {
         placeholderImage = Configuration.GetValue<string>("PlaceholderImageURL");
         tiposSangre = await DB.GetTiposSangre();
+    }
+
+        protected override async Task OnParametersSetAsync()
+    {
+        buttonStyle = "btn btn-primary";
+        buttonText = "Agregar";
+
+        if (ClienteCedula is null)
+        {
+            return;
+        }
+        else
+        {
+            buttonStyle = "btn btn-success";
+            buttonText = "Editar";
+
+            cliente = await DB.FindCliente(ClienteCedula);
+        }
+
+        this.StateHasChanged();
     }
 }
