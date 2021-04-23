@@ -1,0 +1,53 @@
+﻿@page "/listado_clientes"
+@inject IAlquilerService DB
+
+<h3 class="mb-3">Clientes</h3>
+
+<a href="/gestion_clientes" class="btn btn-primary mb-4">Agregar Cliente</a>
+
+<div>
+    <table class="table table-hover">
+        <thead class="thead-light">
+            <tr>
+                <th>Foto</th>
+                <th>Cedula</th>
+                <th>Nombre Completo</th>
+                <th colspan="2">Licencia</th>
+                <th>Tipo de Sangre</th>
+                <th>Correo</th>
+                <th>Nacionalidad</th>
+                <th></th>
+                <th></th>
+            </tr>
+        </thead>
+        <tbody>
+            <Virtualize Items="@clientes" Context="cliente">
+                <tr>
+                    <td>
+                        <img src="@cliente.Foto" style="width: 100px; height: 100px" />
+                    </td>
+                    <td>@cliente.Cedula</td>
+                    <td>@cliente.Nombre @cliente.Apellido</td>
+                    <td>@cliente.Licencia</td>
+                    <td>
+                        <img src="@cliente.FotoLicencia" style="width: 200px; height: 100px" />
+                    </td>
+                    <td>@cliente.TipoSangre.Nombre</td>
+                    <td>@cliente.Correo</td>
+                    <td>@cliente.Nacionalidad</td>
+                    <td><button class="btn btn-success">Editar</button></td>
+                    <td><button class="btn btn-danger">Eliminar</button></td>
+                </tr>
+            </Virtualize>
+        </tbody>
+    </table>
+</div>
+
+@code {
+    List<Cliente> clientes = new();
+
+    protected override async Task OnInitializedAsync()
+    {
+        clientes = await DB.GetAllClientes();
+    }
+}

@@ -1,0 +1,60 @@
+﻿@page "/listado_vehiculos"
+@using Microsoft.Extensions.Configuration;
+@inject IAlquilerService DB
+@inject IConfiguration Configuration
+
+<h3 class="mb-3">Vehículos</h3>
+
+<a href="/gestion_vehiculos" class="btn btn-primary mb-4">Agregar Vehiculo</a>
+
+<div>
+    <table class="table table-hover">
+        <thead class="thead-light">
+            <tr>
+                <th>Marca</th>
+                <th>Modelo</th>
+                <th>Año</th>
+                <th>Precio por día</th>
+                <th>Tipo de Vehiculo</th>
+                <th>Capacidad de Carga</th>
+                <th>Pasajeros</th>
+                <th>Matrícula</th>
+                <th>Número de Seguro</th>
+                <th>Foto</th>
+                <th>Latitud</th>
+                <th>Longitud</th>
+            </tr>
+        </thead>
+        <tbody>
+            <Virtualize Items="@vehiculos" Context="vehiculo">
+                <tr>
+                    <td>@vehiculo.Marca</td>
+                    <td>@vehiculo.Modelo</td>
+                    <td>@vehiculo.Anio</td>
+                    <td>@vehiculo.PrecioPorDia</td>
+                    <td>@vehiculo.Tipo.Nombre</td>
+                    <td>@vehiculo.CapacidadCarga</td>
+                    <td>@vehiculo.Pasajeros</td>
+                    <td>@vehiculo.Matricula</td>
+                    <td>@vehiculo.NumeroSeguro</td>
+                    <td>
+                        <img src="@vehiculo.Foto" style="width: 100px; height: 100px" />
+                    </td>
+                    <td>@vehiculo.Latitud</td>
+                    <td>@vehiculo.Longitud</td>
+                    <td><button class="btn btn-success">Editar</button></td>
+                    <td><button class="btn btn-danger">Eliminar</button></td>
+                </tr>
+            </Virtualize>
+        </tbody>
+    </table>
+</div>
+
+@code {
+    List<Vehiculo> vehiculos = new();
+
+    protected override async Task OnInitializedAsync()
+    {
+        vehiculos = await DB.GetAllVehiculos();
+    }
+}

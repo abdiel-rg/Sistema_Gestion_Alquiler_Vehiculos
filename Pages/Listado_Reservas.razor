@@ -1,0 +1,42 @@
+﻿@page "/listado_reservas"
+@inject IAlquilerService DB
+
+<h3 class="mb-3">Reservas</h3>
+
+<a href="/gestion_reservas" class="btn btn-primary mb-4">Agregar Reserva</a>
+
+<div>
+    <table class="table table-hover">
+        <thead class="thead-light">
+            <tr>
+                <th>Vehiculo</th>
+                <th>Cliente</th>
+                <th>Fecha de Inicio</th>
+                <th>Fecha de Fin</th>
+                <th></th>
+                <th></th>
+            </tr>
+        </thead>
+        <tbody>
+            <Virtualize Items="@reservas" Context="reserva">
+                <tr>
+                    <td>@reserva.Vehiculo.Marca @reserva.Vehiculo.Modelo</td>
+                    <td>@reserva.Cliente.Nombre @reserva.Cliente.Apellido</td>
+                    <td>@reserva.FechaInicio</td>
+                    <td>@reserva.FechaFin</td>
+                    <td><button class="btn btn-success">Editar</button></td>
+                    <td><button class="btn btn-danger">Eliminar</button></td>
+                </tr>
+            </Virtualize>
+        </tbody>
+    </table>
+</div>
+
+@code {
+    List<Reserva> reservas = new();
+
+    protected override async Task OnInitializedAsync()
+    {
+        reservas = await DB.GetAllReservas();
+    }
+}
