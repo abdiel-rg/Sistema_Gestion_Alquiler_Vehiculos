@@ -7,6 +7,8 @@ using System.Threading.Tasks;
 
 namespace Sistema_Gestion_Alquiler_Vehiculos.Data.Services
 {
+#nullable enable
+
     public partial class AlquilerService
     {
         public async Task<bool> AddCliente(Cliente cliente)
@@ -19,6 +21,11 @@ namespace Sistema_Gestion_Alquiler_Vehiculos.Data.Services
         {
             Context.Clientes.Update(cliente);
             return await Context.SaveChangesAsync() > 0;
+        }
+
+        public async ValueTask<Cliente?> FindCliente(string cedula)
+        {
+            return await Context.Clientes.FindAsync(cedula);
         }
 
         public async Task<bool> SetEstatusCliente(Cliente cliente, bool estatus)
@@ -36,6 +43,12 @@ namespace Sistema_Gestion_Alquiler_Vehiculos.Data.Services
                 return await AddCliente(cliente);
             }
             return await UpdateCliente(cliente);
+        }
+
+        public Task<List<Cliente>> GetAllClientes()
+        {
+            return Context.Clientes.Include(c => c.TipoSangre)
+                                  .ToListAsync();
         }
 
         public Task<List<Cliente>> GetAllAvailableClientes()

@@ -22,16 +22,38 @@ namespace Sistema_Gestion_Alquiler_Vehiculos.Data.Services
             Context.Vehiculos.Update(vehiculo);
             return await Context.SaveChangesAsync() > 0;
         }
-
-        public async Task<bool> SetEstatusVehiculo(Vehiculo vehiculo, bool disponible)
+        public async Task<Vehiculo?> FindVehiculo(int ID)
         {
-            vehiculo.Disponible = disponible;
-            return await Context.SaveChangesAsync() > 0;
+            return await Context.Vehiculos.FindAsync(ID);
+        }
+
+        public Task<List<Vehiculo>> GetAllVehiculos()
+        {
+            return Context.Vehiculos.Include(v => v.Tipo)
+                                    .ToListAsync();
         }
 
         public Task<List<Vehiculo>> GetAllAvailableVehiculos()
         {
-            return Context.Vehiculos.Where(v => v.Disponible).ToListAsync();
+            var vehiculos = Context.Vehiculos.ToListAsync();
+            return vehiculos.ContinueWith(t => t.Result.Where(v => v.Disponible())
+                                                       .ToList());
+        }
+
+        public Task<List<Vehiculo>> GetAllAvailableVehiculos(DateTime FechaI, DateTime FechaF)
+        {
+            Task<List<Vehiculo>> vehiculosSinReservas = Context.Vehiculos.Include(v => v.Reservas)
+                                                                         .Where(v => v.Reservas.Count == 0 || v.Disponible(FechaF))
+                                                                         .ToListAsync();
+
+            Task<List<Vehiculo>> vehiculosDisponibles = Context.Reservas.Include(r => r.Vehiculo)
+                                                                        .Where(r => r.FechaInicio < FechaI || r.FechaFin >= FechaF)
+                                                                        .Select(r => r.Vehiculo)
+                                                                        .ToListAsync();
+
+            return Task.WhenAll(vehiculosSinReservas, vehiculosDisponibles)
+                       .ContinueWith(t => t.Result[0].Concat(t.Result[1])
+                                                     .ToList());
         }
 
         public async Task<bool> SaveVehiculo(Vehiculo vehiculo)

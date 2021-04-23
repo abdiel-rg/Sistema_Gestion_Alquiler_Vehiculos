@@ -42,8 +42,10 @@ namespace Sistema_Gestion_Alquiler_Vehiculos.Data.Models
 
         public double Longitud { get; set; }
 
-        public bool Disponible { get; set; }
+        public bool Disponible() => DateTime.Compare(DateTime.Today, Reservas.Max(r => r.FechaFin)) >= 0;
 
-        public List<Reserva> Reservas { get; set; }
+        public bool Disponible(DateTime fecha) => DateTime.Compare(fecha, Reservas.Max(r => r.FechaFin)) >= 0;
+
+        public List<Reserva> Reservas { get; set; } = new();
     }
 }

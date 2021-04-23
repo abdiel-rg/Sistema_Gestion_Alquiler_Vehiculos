@@ -22,18 +22,15 @@ namespace Sistema_Gestion_Alquiler_Vehiculos.Data.Services
             return await Context.SaveChangesAsync() > 0;
         }
 
+        public async Task<Reserva?> FindReserva(int ID)
+        {
+            return await Context.Reservas.FindAsync(ID);
+        }
+
         public Task<List<Reserva>> GetAllReservas()
         {
             return Context.Reservas.Include(r => r.Vehiculo)
-                                   .ToListAsync();
-        }
-
-        public Task<List<Vehiculo>> GetReservasFromDates(DateTime FechaI, DateTime FechaF)
-        {
-            return Context.Reservas.Include(r => r.Vehiculo)
-                                   .Where(r => r.FechaInicio == FechaI &&
-                                               r.FechaFin == FechaF)
-                                   .Select(r => r.Vehiculo)
+                                   .Include(r => r.Cliente)
                                    .ToListAsync();
         }
     }
