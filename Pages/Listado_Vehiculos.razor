@@ -8,7 +8,7 @@
 <a href="/gestion_vehiculos" class="btn btn-primary mb-4">Agregar Vehiculo</a>
 
 <div>
-    <table class="table table-hover">
+    <table class="table table-hover table-bordered">
         <thead class="thead-light">
             <tr>
                 <th>Marca</th>
@@ -19,10 +19,13 @@
                 <th>Capacidad de Carga</th>
                 <th>Pasajeros</th>
                 <th>Matrícula</th>
+                <th>Habilitado</th>
                 <th>Número de Seguro</th>
                 <th>Foto</th>
                 <th>Latitud</th>
                 <th>Longitud</th>
+                <th></th>
+                <th></th>
             </tr>
         </thead>
         <tbody>
@@ -36,14 +39,31 @@
                     <td>@vehiculo.CapacidadCarga</td>
                     <td>@vehiculo.Pasajeros</td>
                     <td>@vehiculo.Matricula</td>
+                    <td>
+                        @if (vehiculo.Habilitado)
+                        { 
+                            <span class="oi oi-check"></span>
+                        }
+                        else
+                        { 
+                            <span class="oi oi-x"></span>
+                        }
+                    </td>
                     <td>@vehiculo.NumeroSeguro</td>
                     <td>
                         <img src="@vehiculo.Foto" style="width: 100px; height: 100px" />
                     </td>
                     <td>@vehiculo.Latitud</td>
                     <td>@vehiculo.Longitud</td>
-                    <td><button class="btn btn-success">Editar</button></td>
-                    <td><button class="btn btn-danger">Eliminar</button></td>
+                    <td>
+                        <a href="/gestion_vehiculos/@vehiculo.ID" class="btn btn-success">Editar</a>
+                    </td>
+                    <td>
+                        <button class="btn @(vehiculo.Habilitado ? "btn btn-danger" : "btn-warning")"
+                                @onclick="async () => await DB.SetEstatusVehiculo(vehiculo.ID)">
+                            @(vehiculo.Habilitado ? "Deshabilitar" : "Habilitar")
+                        </button>
+                    </td>
                 </tr>
             </Virtualize>
         </tbody>

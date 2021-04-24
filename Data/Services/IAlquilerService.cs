@@ -16,6 +16,10 @@ namespace Sistema_Gestion_Alquiler_Vehiculos.Data.Services
         
         Task<Vehiculo?> FindVehiculo(int ID);
 
+        Task<bool> SetEstatusVehiculo(int id);
+
+        Task<bool> SetEstatusVehiculo(int id, bool estado);
+
         Task<List<Vehiculo>> GetAllVehiculos();
 
         Task<List<Vehiculo>> GetAllAvailableVehiculos();
@@ -24,6 +28,8 @@ namespace Sistema_Gestion_Alquiler_Vehiculos.Data.Services
 
         Task<bool> SaveVehiculo(Vehiculo vehiculo);
 
+
+        Task<bool> AddTipoVehiculo(TipoVehiculo tipo);
 
         Task<List<TipoVehiculo>> GetTiposVehiculo();
 
@@ -37,7 +43,9 @@ namespace Sistema_Gestion_Alquiler_Vehiculos.Data.Services
 
         ValueTask<Cliente?> FindCliente(string cedula);
 
-        Task<bool> SetEstatusCliente(Cliente cliente, bool estatus);
+        Task<bool> SetEstatusCliente(string cedula);
+
+        Task<bool> SetEstatusCliente(string cedula, bool estatus);
 
         Task<bool> SaveCliente(Cliente cliente);
 
@@ -52,8 +60,8 @@ namespace Sistema_Gestion_Alquiler_Vehiculos.Data.Services
 
         Task<List<Reserva>> GetAllReservas();
 
-
-        Task<bool> CreateFactura(Factura factura);
+        
+        Task<bool> UpdateFactura(Factura factura);
 
         Task<bool> PayFactura(Factura factura, decimal cant);
     }

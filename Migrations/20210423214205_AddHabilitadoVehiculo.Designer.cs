@@ -2,15 +2,17 @@
 using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Sistema_Gestion_Alquiler_Vehiculos.Data;
 
 namespace Sistema_Gestion_Alquiler_Vehiculos.Migrations
 {
     [DbContext(typeof(SGAVContext))]
-    partial class SGAVContextModelSnapshot : ModelSnapshot
+    [Migration("20210423214205_AddHabilitadoVehiculo")]
+    partial class AddHabilitadoVehiculo
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -284,10 +286,9 @@ namespace Sistema_Gestion_Alquiler_Vehiculos.Migrations
                         .HasColumnType("INTEGER");
 
                     b.Property<string>("CedulaCliente")
-                        .IsRequired()
                         .HasColumnType("TEXT");
 
-                    b.Property<int?>("FacturaID")
+                    b.Property<int>("FacturaID")
                         .HasColumnType("INTEGER");
 
                     b.Property<DateTime>("FechaFin")
@@ -518,13 +519,13 @@ namespace Sistema_Gestion_Alquiler_Vehiculos.Migrations
                 {
                     b.HasOne("Sistema_Gestion_Alquiler_Vehiculos.Data.Models.Cliente", "Cliente")
                         .WithMany("Reservas")
-                        .HasForeignKey("CedulaCliente")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                        .HasForeignKey("CedulaCliente");
 
                     b.HasOne("Sistema_Gestion_Alquiler_Vehiculos.Data.Models.Factura", "Factura")
                         .WithMany()
-                        .HasForeignKey("FacturaID");
+                        .HasForeignKey("FacturaID")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
 
                     b.HasOne("Sistema_Gestion_Alquiler_Vehiculos.Data.Models.Vehiculo", "Vehiculo")
                         .WithMany("Reservas")

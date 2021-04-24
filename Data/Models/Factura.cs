@@ -14,7 +14,7 @@ namespace Sistema_Gestion_Alquiler_Vehiculos.Data.Models
                                       (Reserva.FechaFin - Reserva.FechaInicio).Days;
 
         [Column(TypeName = "NUMERIC")]
-        public decimal MontoPagado { get; set; }
+        public decimal MontoPagado { get; set; } = 0;
 
         public bool Pagada => MontoPagado.Equals(MontoAPagar);
 

@@ -13,13 +13,17 @@ namespace Sistema_Gestion_Alquiler_Vehiculos.Data.Services
     {
         public async Task<bool> CreateReserva(Reserva reserva)
         {
+            List<bool> results = new();
             await Context.Reservas.AddAsync(reserva);
-            await CreateFactura(new()
+            results.Add(await Context.SaveChangesAsync() > 0);
+            Factura factura = new()
             {
-                MontoPagado = 0,
                 ReservaID = reserva.ID
-            });
-            return await Context.SaveChangesAsync() > 0;
+            };
+            results.Add(await CreateFactura(factura));
+            reserva.FacturaID = factura.ID;
+            results.Add(await Context.SaveChangesAsync() > 0);
+            return results.All(r => r == true);
         }
 
         public async Task<Reserva?> FindReserva(int ID)

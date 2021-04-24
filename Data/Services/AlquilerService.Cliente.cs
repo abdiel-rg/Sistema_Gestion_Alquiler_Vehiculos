@@ -28,17 +28,25 @@ namespace Sistema_Gestion_Alquiler_Vehiculos.Data.Services
             return await Context.Clientes.FindAsync(cedula);
         }
 
-        public async Task<bool> SetEstatusCliente(Cliente cliente, bool estatus)
+        public async Task<bool> SetEstatusCliente(string cedula)
         {
+            Cliente cliente = (await FindCliente(cedula))!;
+            cliente.Disponible = !cliente.Disponible;
+            return await SaveCliente(cliente);
+        }
+        
+        public async Task<bool> SetEstatusCliente(string cedula, bool estatus)
+        {
+            Cliente cliente = (await FindCliente(cedula))!;
             cliente.Disponible = estatus;
-            return await Context.SaveChangesAsync() > 0;
+            return await SaveCliente(cliente);
         }
 
 #nullable enable
 
         public async Task<bool> SaveCliente(Cliente cliente)
         {
-            if (await Context.FindAsync<Reserva?>(cliente.Cedula) is null)
+            if (await Context.FindAsync<Cliente?>(cliente.Cedula) is null)
             {
                 return await AddCliente(cliente);
             }

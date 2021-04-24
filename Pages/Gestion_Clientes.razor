@@ -4,10 +4,11 @@
 @inject IAlquilerService DB
 @inject IFileService FileService
 @inject IConfiguration Configuration
+@inject NavigationManager Nav
 
 <h3>Clientes</h3>
 
-<EditForm Model="cliente" OnValidSubmit="GuardarCliente">
+<EditForm Model="cliente" OnValidSubmit="async () => await GuardarCliente()">
     <DataAnnotationsValidator />
     <div class="container-fluid">
         <div class="row">
@@ -56,7 +57,8 @@
                         {
                             <option value="@ts.ID">@ts.Nombre</option>
                         }
-                    </InputSelect>                </div>
+                    </InputSelect>
+                </div>
             </div>
 
             <div class="col-3">
@@ -85,8 +87,8 @@
     [Parameter]
     public string ClienteCedula { get; set; }
 
-    private string buttonStyle { get; set;}
-    private string buttonText { get; set;}
+    private string buttonStyle { get; set; }
+    private string buttonText { get; set; }
 
     string placeholderImage = string.Empty;
     List<TipoSangre> tiposSangre = new();
@@ -97,7 +99,11 @@
         FotoLicencia = null
     };
 
-    async Task GuardarCliente() => await DB.SaveCliente(cliente);
+    async Task GuardarCliente()
+    {
+        await DB.SaveCliente(cliente);
+        Nav.NavigateTo("/listado_clientes", forceLoad: true);
+    }
 
     async Task SetFotoCliente(InputFileChangeEventArgs args)
     {
@@ -115,7 +121,7 @@
         tiposSangre = await DB.GetTiposSangre();
     }
 
-        protected override async Task OnParametersSetAsync()
+    protected override async Task OnParametersSetAsync()
     {
         buttonStyle = "btn btn-primary";
         buttonText = "Agregar";

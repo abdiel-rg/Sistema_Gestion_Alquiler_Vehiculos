@@ -12,10 +12,12 @@
                 <th>Foto</th>
                 <th>Cedula</th>
                 <th>Nombre Completo</th>
-                <th colspan="2">Licencia</th>
+                <th>Licencia</th>
+                <th>Foto de Licencia</th>
                 <th>Tipo de Sangre</th>
                 <th>Correo</th>
                 <th>Nacionalidad</th>
+                <th>Estado</th>
                 <th></th>
                 <th></th>
             </tr>
@@ -35,8 +37,25 @@
                     <td>@cliente.TipoSangre.Nombre</td>
                     <td>@cliente.Correo</td>
                     <td>@cliente.Nacionalidad</td>
-                    <td><button class="btn btn-success">Editar</button></td>
-                    <td><button class="btn btn-danger">Eliminar</button></td>
+                    <td>
+                        @if (cliente.Disponible)
+                        { 
+                            <span class="oi oi-check"></span>
+                        }
+                        else
+                        { 
+                            <span class="oi oi-x"></span>
+                        }
+                    </td>
+                    <td>
+                        <a href="/gestion_clientes/@cliente.Cedula" class="btn btn-success">Editar</a>
+                    </td>
+                    <td>
+                        <button class="btn @(cliente.Disponible ? "btn btn-danger" :"btn-warning")"
+                                @onclick="async () => await DB.SetEstatusCliente(cliente.Cedula)">
+                            @(cliente.Disponible ? "Deshabilitar" : "Habilitar")
+                        </button>
+                    </td>
                 </tr>
             </Virtualize>
         </tbody>

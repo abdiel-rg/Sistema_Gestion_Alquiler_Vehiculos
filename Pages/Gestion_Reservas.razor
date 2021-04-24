@@ -6,44 +6,44 @@
 @inject NavigationManager Nav
 @inject IConfiguration Configuration
 
-<h3>Gestion Reservas</h3>
+<h3>Gestión de Reservas</h3>
 
-<EditForm Model="reserva">
+<EditForm Model="reserva" OnValidSubmit="GuardarReservas">
     <DataAnnotationsValidator />
     <div class="container-fluid">
         <div class="row">
             <div class="col-4">
 
-                <label class="form-label">Tipo de Vehículo</label>
+                <label class="form-label">Seleccione un Vehículo</label>
                 <div class="input-group mb-3">
-                    <InputNumber @bind-Value="@reserva.VehiculoID" class="form-control" list="vehiculos_ids" min="1" />
-                    <datalist id="vehiculos_ids">
+                    <InputSelect placeholder="Vehiculo" @bind-Value="@reserva.VehiculoID" class="form-control">
+                        <option value="0"></option>
                         @foreach (Vehiculo vehiculo in vehiculos)
                         {
                             <option value="@vehiculo.ID">@vehiculo.Marca @vehiculo.Modelo @vehiculo.Anio</option>
                         }
-                    </datalist>
+                    </InputSelect>
                 </div>
 
-                <label class="form-label">Cliente</label>
+                <label class="form-label">Seleccione un Cliente</label>
                 <div class="input-group mb-3">
-                    <InputText @bind-Value="@reserva.CedulaCliente" class="form-control" list="clientes_cedulas" />
-                    <datalist id="clientes_cedulas">
+                    <InputSelect placeholder="Cliente" @bind-Value="@reserva.CedulaCliente" class="form-control">
+                        <option value=""></option>
                         @foreach (Cliente cliente in clientes)
                         {
-                            <option value="@cliente.Cedula">@cliente.Nombre</option>
+                            <option value="@cliente.Cedula">@cliente.Cedula - @cliente.Nombre @cliente.Apellido</option>
                         }
-                    </datalist>
+                    </InputSelect>
                 </div>
 
                 <label class="form-label">Fecha de Inicio:</label>
                 <div class="input-group mb-3">
-                    <InputDate class="form-control" @bind-Value="reserva.FechaInicio" />
+                    <InputDate class="form-control" @bind-Value="@reserva.FechaInicio" />
                 </div>
 
                 <label class="form-label">Fecha de Fin:</label>
                 <div class="input-group mb-3">
-                    <InputDate class="form-control" @bind-Value="reserva.FechaFin" />
+                    <InputDate class="form-control" @bind-Value="@reserva.FechaFin" />
                 </div>
             </div>
         </div>
@@ -70,6 +70,8 @@
 
     List<Cliente> clientes = new();
     List<Vehiculo> vehiculos = new();
+
+    async Task GuardarReservas() => await DB.CreateReserva(reserva);
 
     protected override async Task OnParametersSetAsync()
     {

@@ -27,6 +27,20 @@ namespace Sistema_Gestion_Alquiler_Vehiculos.Data.Services
             return await Context.Vehiculos.FindAsync(ID);
         }
 
+        public async Task<bool> SetEstatusVehiculo(int id)
+        {
+            Vehiculo vehiculo = (await FindVehiculo(id))!;
+            vehiculo.Habilitado = !vehiculo.Habilitado;
+            return await SaveVehiculo(vehiculo);
+        }
+
+        public async Task<bool> SetEstatusVehiculo(int id, bool estado)
+        {
+            Vehiculo vehiculo = (await FindVehiculo(id))!;
+            vehiculo.Habilitado = estado;
+            return await SaveVehiculo(vehiculo);
+        }
+
         public Task<List<Vehiculo>> GetAllVehiculos()
         {
             return Context.Vehiculos.Include(v => v.Tipo)
@@ -36,7 +50,7 @@ namespace Sistema_Gestion_Alquiler_Vehiculos.Data.Services
         public Task<List<Vehiculo>> GetAllAvailableVehiculos()
         {
             var vehiculos = Context.Vehiculos.ToListAsync();
-            return vehiculos.ContinueWith(t => t.Result.Where(v => v.Disponible())
+            return vehiculos.ContinueWith(t => t.Result.Where(v => v.Disponible() || v.Habilitado)
                                                        .ToList());
         }
 
@@ -58,7 +72,7 @@ namespace Sistema_Gestion_Alquiler_Vehiculos.Data.Services
 
         public async Task<bool> SaveVehiculo(Vehiculo vehiculo)
         {
-            if (await Context.FindAsync<Reserva?>(vehiculo.ID) is null)
+            if (await Context.FindAsync<Vehiculo?>(vehiculo.ID) is null)
             {
                 return await AddVehiculo(vehiculo);
             }
