@@ -2,6 +2,7 @@
 @using Microsoft.Extensions.Configuration;
 @inject IAlquilerService DB
 @inject IConfiguration Configuration
+@attribute [Authorize]
 
 <div class="p-5 text-center bg-transparent font-weight-bolder text-uppercase">
     <h1 class="mb-3">Vehiculos</h1>

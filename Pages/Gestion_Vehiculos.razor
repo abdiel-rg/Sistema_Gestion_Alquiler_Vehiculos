@@ -98,17 +98,19 @@
             <InputText class="form-control" @bind-Value="vehiculo.Matricula"></InputText>
         </div>
     </div>
-
-    <div class="form-row justify-content-center align-items-center">
-        <label class="form-label">Seleccione su ubicación en el mapa</label>
-        <RadzenGoogleMap Center="Center"
-                         Data="markers"
-                         MapClick="SetMarker" />
-    </div>
-
     <div class="row">
-        <button type="submit" class="@buttonStyle mx-auto">@buttonText</button>
-    </div>
+        <div class="form-row justify-content-center align-items-center">
+            <label class="form-label">Seleccione su ubicación en el mapa</label>
+            <RadzenGoogleMap Style="height:70vh; width: 70vw;"
+                             Center="Center"
+                             Data="markers"
+                             MapClick="SetMarker" />
+        </div>
+        </div>
+
+        <div class="row">
+            <button type="submit" class="@buttonStyle mx-auto">@buttonText</button>
+        </div>
 </EditForm>
 
 @code {

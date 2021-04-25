@@ -1,7 +1,15 @@
 <CascadingAuthenticationState>
     <Router AppAssembly="@typeof(Program).Assembly" PreferExactMatches="@true">
         <Found Context="routeData">
-            <AuthorizeRouteView RouteData="@routeData" DefaultLayout="@typeof(MainLayout)" />
+            <AuthorizeRouteView RouteData="@routeData" DefaultLayout="@typeof(MainLayout)">
+                <NotAuthorized>
+                    <h1 class="text-center">Lo sentimos</h1>
+                    <p class="text-center">No puede acceder a este contenido si no esta logueado</p>
+                </NotAuthorized>
+                
+                
+                <Authorizing></Authorizing>
+                </AuthorizeRouteView>
         </Found>
         <NotFound>
             <LayoutView Layout="@typeof(MainLayout)">

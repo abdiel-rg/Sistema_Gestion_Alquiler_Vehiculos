@@ -1,5 +1,6 @@
 ﻿@page "/listado_reservas"
 @inject IAlquilerService DB
+@attribute [Authorize]
 
 <div class="p-5 text-center bg-transparent font-weight-bolder text-uppercase">
     <h1 class="mb-3">Reservas</h1>
@@ -41,11 +42,9 @@
     </table>
 </div>
 
-@code {
-    List<Reserva> reservas = new();
+@code { List<Reserva> reservas = new();
 
-    protected override async Task OnInitializedAsync()
-    {
-        reservas = await DB.GetAllReservas();
-    }
-}
+            protected override async Task OnInitializedAsync()
+            {
+                reservas = await DB.GetAllReservas();
+            } }

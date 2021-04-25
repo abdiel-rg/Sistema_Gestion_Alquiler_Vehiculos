@@ -1,26 +1,24 @@
 ﻿@page "/listado_clientes"
 @inject IAlquilerService DB
+@attribute [Authorize]
+<h3 class="mb-3">Clientes</h3>
 
+<div class="p-5 text-center bg-transparent font-weight-bolder text-uppercase">
+    <h1 class="mb-3">Clientes</h1>
+</div>
 
-    <div class="p-5 text-center bg-transparent font-weight-bolder text-uppercase">
-        <h1 class="mb-3">Clientes</h1>
-    </div>
+<div class="text-right">
+    <a href="/gestion_clientes" class="btn btn-outline-success mb-4"><span class="oi oi-plus" aria-hidden="true"></span> Agregar Cliente</a>
+</div>
 
-    <div class="text-right">
-        <a href="/gestion_clientes" class="btn btn-outline-success mb-4"><span class="oi oi-plus" aria-hidden="true"></span> Agregar Cliente</a>
-    </div>
-
-    <div class="table-responsive-md ">
-        <style>
-            .liltable th {
-                text-align: center;
-            }
-
-            .liltable td {
-                text-align: center;
-            }
-        </style>
-        <table class="liltable table table-hover table-bordered">
+<div class="table-responsive-md ">
+    <style>
+        .liltable th, td {
+            text-align: center;
+        }
+    </style>
+    <div>
+        <table class="table table-hover">
             <thead class="thead-light">
                 <tr>
                     <th>Foto</th>
@@ -32,6 +30,7 @@
                     <th>Correo</th>
                     <th>Nacionalidad</th>
                     <th>Estado</th>
+                    <th></th>
                     <th></th>
                 </tr>
             </thead>
@@ -53,17 +52,16 @@
                         <td>
                             @if (cliente.Disponible)
                             {
-                                <span class="oi oi-check"></span>
-                            }
+            <span class="oi oi-check"></span> }
                             else
                             {
-                                <span class="oi oi-x"></span>
-                            }
+            <span class="oi oi-x"></span>}
                         </td>
                         <td>
                             <a href="/gestion_clientes/@cliente.Cedula" class="btn btn-success">Editar</a>
-                            <br />
-                            <button class="btn @(cliente.Disponible ? "btn btn-outline-danger" : "btn btn-outline-warning")"
+                        </td>
+                        <td>
+                            <button class="btn @(cliente.Disponible ? "btn btn-danger" :"btn-warning")"
                                     @onclick="async () => await DB.SetEstatusCliente(cliente.Cedula)">
                                 @(cliente.Disponible ? "Deshabilitar" : "Habilitar")
                             </button>
@@ -73,12 +71,11 @@
             </tbody>
         </table>
     </div>
+</div>
 
-    @code {
-        List<Cliente> clientes = new();
+@code { List<Cliente> clientes = new();
 
-        protected override async Task OnInitializedAsync()
-        {
-            clientes = await DB.GetAllClientes();
-        }
-    }
+            protected override async Task OnInitializedAsync()
+            {
+                clientes = await DB.GetAllClientes();
+            } }
