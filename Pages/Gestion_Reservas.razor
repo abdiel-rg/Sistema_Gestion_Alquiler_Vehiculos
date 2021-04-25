@@ -71,7 +71,11 @@
     List<Cliente> clientes = new();
     List<Vehiculo> vehiculos = new();
 
-    async Task GuardarReservas() => await DB.CreateReserva(reserva);
+    async Task GuardarReservas()
+    {
+        await DB.CreateReserva(reserva);
+        Nav.NavigateTo("/listado_reservas", forceLoad: true);
+    }
 
     protected override async Task OnParametersSetAsync()
     {

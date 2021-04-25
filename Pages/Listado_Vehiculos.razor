@@ -14,16 +14,18 @@
                 <th>Marca</th>
                 <th>Modelo</th>
                 <th>Año</th>
-                <th>Precio por día</th>
-                <th>Tipo de Vehiculo</th>
+                <th>Color</th>
+                <th>Precio por Día</th>
+                <th>Tipo de Vehículo</th>
                 <th>Capacidad de Carga</th>
                 <th>Pasajeros</th>
                 <th>Matrícula</th>
                 <th>Habilitado</th>
                 <th>Número de Seguro</th>
                 <th>Foto</th>
-                <th>Latitud</th>
-                <th>Longitud</th>
+                <th>Ubicación</th>
+                <th>Cantidad de Reservas</th>
+                <th>Monto Total Recaudado</th>
                 <th></th>
                 <th></th>
             </tr>
@@ -34,27 +36,29 @@
                     <td>@vehiculo.Marca</td>
                     <td>@vehiculo.Modelo</td>
                     <td>@vehiculo.Anio</td>
-                    <td>@vehiculo.PrecioPorDia</td>
+                    <td>@vehiculo.Color</td>
+                    <td>@vehiculo.PrecioPorDia.ToString("C2")</td>
                     <td>@vehiculo.Tipo.Nombre</td>
-                    <td>@vehiculo.CapacidadCarga</td>
+                    <td>@vehiculo.CapacidadCarga kg</td>
                     <td>@vehiculo.Pasajeros</td>
                     <td>@vehiculo.Matricula</td>
                     <td>
                         @if (vehiculo.Habilitado)
-                        { 
+                        {
                             <span class="oi oi-check"></span>
                         }
                         else
-                        { 
+                        {
                             <span class="oi oi-x"></span>
                         }
                     </td>
                     <td>@vehiculo.NumeroSeguro</td>
                     <td>
-                        <img src="@vehiculo.Foto" style="width: 100px; height: 100px" />
+                        <img src="@vehiculo.Foto" style="width: 100px;" />
                     </td>
-                    <td>@vehiculo.Latitud</td>
-                    <td>@vehiculo.Longitud</td>
+                    <td>@vehiculo.Latitud, @vehiculo.Longitud</td>
+                    <td>@vehiculo.Reservas.Count</td>
+                    <td>@vehiculo.Reservas.Sum(r => r.Factura.MontoPagado).ToString("C2")</td>
                     <td>
                         <a href="/gestion_vehiculos/@vehiculo.ID" class="btn btn-success">Editar</a>
                     </td>

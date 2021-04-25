@@ -1,0 +1,71 @@
+﻿@page "/mapa"
+@inject IMarkerFactory MarkerFactory
+
+<h3>Mapa</h3>
+
+<div id="mapaLeaflet" style="width: 500px; height: 500px">
+    <Map @ref="map" MapOptions="mapOptions" />
+</div>
+
+<button @onclick="AddMarkerTest">Marcador</button>
+
+@code {
+    static LatLng Center { get; set; }
+
+    public Mapa()
+    {
+        Center = new LatLng(70.163137, 18.903088);
+    }
+
+    Map map { get; set; }
+
+    List<Marker> Markers = new();
+
+
+    MapOptions mapOptions { get; set; } = new()
+    {
+        DivId = "mapaLeaflet",
+        Center = Center,
+        Zoom = 13,
+        UrlTileLayer = "https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png",
+        SubOptions = new()
+        {
+            Attribution = "&copy; <a lhref='http://www.openstreetmap.org/copyright'>OpenStreetMap</a>",
+            TileSize = 512,
+            ZoomOffset = -1,
+            MaxZoom = 19
+        }
+    };
+
+
+    async Task AddMarkerTest()
+    {
+        Marker marker1 = await PlaceMarker(Center, map);
+        Markers.Add(marker1);
+        await Task.Delay(2500);
+        await RemoveMarker(marker1);
+        var center = await map.GetCenter();
+        await map.OnClick((MouseEvent mouseEvent) =>
+        {
+            Console.WriteLine($"{mouseEvent.LatLng.Lat} {mouseEvent.LatLng.Lng}");
+            return Task.CompletedTask;
+        });
+        //await map.(Center, 5);
+    }
+
+    async Task<Marker> PlaceMarker(LatLng latlng, Map map)
+    {
+        return await MarkerFactory.CreateAndAddToMap(latlng, map);
+    }
+
+    async Task RemoveAllMarkers()
+    {
+        List<Task<Layer>> tasks = Markers.Select(m => m.Remove()).ToList();
+        await Task.WhenAll(tasks);
+    }
+
+    async Task RemoveMarker(Marker marker)
+    {
+        await marker.Remove();
+    }
+}

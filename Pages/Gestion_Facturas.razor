@@ -1,0 +1,59 @@
+﻿@page "/gestion_facturas/{FacturaID:int?}"
+@using System.ComponentModel.DataAnnotations;
+@inject IAlquilerService DB
+@inject NavigationManager Nav
+
+<h3>Gestión de Facturas</h3>
+
+<EditForm Model="factura" OnValidSubmit="PagarFactura">
+    <DataAnnotationsValidator />
+    <div class="container-fluid">
+        <div class="row">
+            <div class="col-4">
+                <div class="form-row justify-content-center align-items-center">
+                    <div class="form-group col-md-2">
+                        <label class="form-label">Monto a Pagar</label>
+                        <InputNumber class="form-control"
+                                     @bind-Value="montoPendiente"
+                                     min="0"
+                                     max="@(factura.MontoAPagar - factura.MontoPagado)"
+                                     step="1" />
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="row">
+        <button class="btn btn-primary mx-auto">Pagar</button>
+    </div>
+</EditForm>
+
+@code {
+    [Parameter]
+    public int? FacturaID { get; set; }
+
+    static Factura factura { get; set; } = new();
+
+    decimal montoPendiente = 0;
+
+    async Task PagarFactura()
+    {
+        await DB.PayFactura(factura, montoPendiente);
+        Nav.NavigateTo("/cobros", forceLoad: true);
+    }
+
+    protected override async Task OnParametersSetAsync()
+    {
+        factura = await DB.FindFactura((int)FacturaID);
+
+        if (FacturaID <= 0)
+        {
+            Nav.NavigateTo("/cobros", forceLoad: true);
+        }
+
+        if (FacturaID is null)
+        {
+            return;
+        }
+    }
+}

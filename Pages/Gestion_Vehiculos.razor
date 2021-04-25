@@ -1,6 +1,8 @@
 ﻿@page "/gestion_vehiculos"
 @page "/gestion_vehiculos/{VehiculoID:int?}"
 @using Microsoft.Extensions.Configuration;
+@using Radzen
+@using Radzen.Blazor
 @inject IAlquilerService DB
 @inject IFileService FileService
 @inject IConfiguration Configuration
@@ -8,14 +10,12 @@
 
 <h3>Gestion Vehiculos</h3>
 
-<EditForm Model="vehiculo" OnValidSubmit="@GuardarVehiculo" OnInvalidSubmit="@(() => Console.WriteLine("Invalido"))" >
+<EditForm Model="vehiculo" OnValidSubmit="@GuardarVehiculo" OnInvalidSubmit="@(() => Console.WriteLine("Invalido"))">
     <DataAnnotationsValidator />
-    <ValidationSummary />
 
     <div class="form-row justify-content-center align-items-center">
         <img src="@(vehiculo.Foto ?? placeholderImage)"
              class="placeholder-image" />
-
     </div>
     <div class="form-row justify-content-center align-items-center">
         <div class="input-group col-md-2">
@@ -55,7 +55,7 @@
             <InputNumber class="form-control" @bind-Value="@vehiculo.PrecioPorDia"></InputNumber>
         </div>
         <div class="form-group col-md-2">
-            <label class="form-label">Capacidad de Carga</label>
+            <label class="form-label">Capacidad de Carga (kg)</label>
             <InputNumber class="form-control" @bind-Value="@vehiculo.CapacidadCarga"></InputNumber>
         </div>
         <div class="form-group col-md-2">
@@ -68,7 +68,6 @@
         <div class="form-group col-md-3">
             <label class="form-label">Tipo de Vehículo</label>
             <InputSelect @bind-Value="@vehiculo.TipoID" class="form-control">
-                <option value=""></option>
                 @foreach (var tp in @tiposVehiculo)
                 {
                     <option value="@tp.ID">@tp.Nombre</option>
@@ -92,10 +91,10 @@
             <InputNumber class="form-control" @bind-Value="vehiculo.Longitud"></InputNumber>
         </div>
     </div>
-    
+
     <div class="form-row justify-content-center align-items-center">
         <div class="form-group col-md-6">
-            <label class="form-label">Matricula</label>
+            <label class="form-label">Matrícula</label>
             <InputText class="form-control" @bind-Value="vehiculo.Matricula"></InputText>
         </div>
     </div>
@@ -131,7 +130,7 @@
     async Task GuardarVehiculo()
     {
         await DB.SaveVehiculo(vehiculo);
-        Nav.NavigateTo("/listado_clientes", forceLoad: true);
+        Nav.NavigateTo("/listado_vehiculos", forceLoad: true);
     }
 
     List<TipoVehiculo> tiposVehiculo = new();
@@ -162,6 +161,7 @@
     public async Task SetFotoVehiculo(InputFileChangeEventArgs args)
     {
         vehiculo.Foto = await FileService.ToBase64StringAsync(args.File);
+        this.StateHasChanged();
     }
 
     protected override async Task OnParametersSetAsync()

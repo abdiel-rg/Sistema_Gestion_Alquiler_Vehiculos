@@ -26,13 +26,13 @@
             <Virtualize Items="@clientes" Context="cliente">
                 <tr>
                     <td>
-                        <img src="@cliente.Foto" style="width: 100px; height: 100px" />
+                        <img src="@cliente.Foto" style="width: 100px;" />
                     </td>
                     <td>@cliente.Cedula</td>
                     <td>@cliente.Nombre @cliente.Apellido</td>
                     <td>@cliente.Licencia</td>
                     <td>
-                        <img src="@cliente.FotoLicencia" style="width: 200px; height: 100px" />
+                        <img src="@cliente.FotoLicencia" style="width: 100px;" />
                     </td>
                     <td>@cliente.TipoSangre.Nombre</td>
                     <td>@cliente.Correo</td>

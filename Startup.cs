@@ -16,6 +16,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Sistema_Gestion_Alquiler_Vehiculos.Data.Services;
+using FisSst.BlazorMaps.DependencyInjection;
 
 namespace Sistema_Gestion_Alquiler_Vehiculos
 {
@@ -47,6 +48,7 @@ namespace Sistema_Gestion_Alquiler_Vehiculos
             services.AddDatabaseDeveloperPageExceptionFilter();
             services.AddScoped<IAlquilerService, AlquilerService>();
             services.AddSingleton<IFileService, FileService>();
+            services.AddBlazorLeafletMaps();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

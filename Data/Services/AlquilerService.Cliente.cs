@@ -63,5 +63,25 @@ namespace Sistema_Gestion_Alquiler_Vehiculos.Data.Services
         {
             return Context.Clientes.Where(c => c.Disponible).ToListAsync();
         }
+
+        public async Task<List<(Cliente cliente, decimal montoPendiente)>> GetClientesWhoOweMoney()
+        {
+            List<Factura> facturas = await Context.Facturas.Include(f => f.Reserva.Vehiculo)
+                                                           .Include(f => f.Reserva)
+                                                           .ThenInclude(r => r.Cliente)
+                                                           .ToListAsync();
+
+            IEnumerable<(Cliente Cliente, decimal montoPendiente)> query2 = from f in facturas
+                                                                            where !f.Pagada
+                                                                            let montoPendiente = f.MontoAPagar - f.MontoPagado
+                                                                            select (f.Reserva.Cliente, montoPendiente) into cm
+                                                                            group cm by cm.Cliente into g
+                                                                            select (
+                                                                                Cliente: g.Key,
+                                                                                MontoPendiente: g.Sum(cm => cm.montoPendiente)
+                                                                            );
+
+            return query2.ToList();
+        }
     }
 }

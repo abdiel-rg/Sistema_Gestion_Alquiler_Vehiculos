@@ -44,6 +44,8 @@ namespace Sistema_Gestion_Alquiler_Vehiculos.Data.Services
         public Task<List<Vehiculo>> GetAllVehiculos()
         {
             return Context.Vehiculos.Include(v => v.Tipo)
+                                    .Include(v => v.Reservas)
+                                    .ThenInclude(r => r.Factura)
                                     .ToListAsync();
         }
 
