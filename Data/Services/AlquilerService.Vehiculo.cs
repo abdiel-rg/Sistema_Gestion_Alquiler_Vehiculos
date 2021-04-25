@@ -56,7 +56,7 @@ namespace Sistema_Gestion_Alquiler_Vehiculos.Data.Services
                                                        .ToList());
         }
 
-        public Task<List<Vehiculo>> GetAllAvailableVehiculos(DateTime FechaI, DateTime FechaF)
+        public async Task<List<Vehiculo>> GetAllAvailableVehiculos(DateTime FechaI, DateTime FechaF)
         {
             Task<List<Vehiculo>> vehiculosSinReservas = Context.Vehiculos.Include(v => v.Reservas)
                                                                          .Where(v => v.Reservas.Count == 0 || v.Disponible(FechaF))
@@ -67,9 +67,8 @@ namespace Sistema_Gestion_Alquiler_Vehiculos.Data.Services
                                                                         .Select(r => r.Vehiculo)
                                                                         .ToListAsync();
 
-            return Task.WhenAll(vehiculosSinReservas, vehiculosDisponibles)
-                       .ContinueWith(t => t.Result[0].Concat(t.Result[1])
-                                                     .ToList());
+            List<Vehiculo>[] vehiculos = await Task.WhenAll(vehiculosSinReservas, vehiculosDisponibles);
+            return vehiculos[0].Concat(vehiculos[1]).ToList();
         }
 
         public async Task<bool> SaveVehiculo(Vehiculo vehiculo)
