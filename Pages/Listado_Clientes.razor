@@ -1,72 +1,84 @@
 ﻿@page "/listado_clientes"
 @inject IAlquilerService DB
 
-<h3 class="mb-3">Clientes</h3>
 
-<a href="/gestion_clientes" class="btn btn-primary mb-4">Agregar Cliente</a>
+    <div class="p-5 text-center bg-transparent font-weight-bolder text-uppercase">
+        <h1 class="mb-3">Clientes</h1>
+    </div>
 
-<div>
-    <table class="table table-hover">
-        <thead class="thead-light">
-            <tr>
-                <th>Foto</th>
-                <th>Cedula</th>
-                <th>Nombre Completo</th>
-                <th>Licencia</th>
-                <th>Foto de Licencia</th>
-                <th>Tipo de Sangre</th>
-                <th>Correo</th>
-                <th>Nacionalidad</th>
-                <th>Estado</th>
-                <th></th>
-                <th></th>
-            </tr>
-        </thead>
-        <tbody>
-            <Virtualize Items="@clientes" Context="cliente">
+    <div class="text-right">
+        <a href="/gestion_clientes" class="btn btn-outline-success mb-4"><span class="oi oi-plus" aria-hidden="true"></span> Agregar Cliente</a>
+    </div>
+
+    <div class="table-responsive-md ">
+        <style>
+            .liltable th {
+                text-align: center;
+            }
+
+            .liltable td {
+                text-align: center;
+            }
+        </style>
+        <table class="liltable table table-hover table-bordered">
+            <thead class="thead-light">
                 <tr>
-                    <td>
-                        <img src="@cliente.Foto" style="width: 100px;" />
-                    </td>
-                    <td>@cliente.Cedula</td>
-                    <td>@cliente.Nombre @cliente.Apellido</td>
-                    <td>@cliente.Licencia</td>
-                    <td>
-                        <img src="@cliente.FotoLicencia" style="width: 100px;" />
-                    </td>
-                    <td>@cliente.TipoSangre.Nombre</td>
-                    <td>@cliente.Correo</td>
-                    <td>@cliente.Nacionalidad</td>
-                    <td>
-                        @if (cliente.Disponible)
-                        { 
-                            <span class="oi oi-check"></span>
-                        }
-                        else
-                        { 
-                            <span class="oi oi-x"></span>
-                        }
-                    </td>
-                    <td>
-                        <a href="/gestion_clientes/@cliente.Cedula" class="btn btn-success">Editar</a>
-                    </td>
-                    <td>
-                        <button class="btn @(cliente.Disponible ? "btn btn-danger" :"btn-warning")"
-                                @onclick="async () => await DB.SetEstatusCliente(cliente.Cedula)">
-                            @(cliente.Disponible ? "Deshabilitar" : "Habilitar")
-                        </button>
-                    </td>
+                    <th>Foto</th>
+                    <th>Cedula</th>
+                    <th>Nombre Completo</th>
+                    <th>Licencia</th>
+                    <th>Foto de Licencia</th>
+                    <th>Tipo de Sangre</th>
+                    <th>Correo</th>
+                    <th>Nacionalidad</th>
+                    <th>Estado</th>
+                    <th></th>
                 </tr>
-            </Virtualize>
-        </tbody>
-    </table>
-</div>
+            </thead>
+            <tbody>
+                <Virtualize Items="@clientes" Context="cliente">
+                    <tr>
+                        <td>
+                            <img src="@cliente.Foto" style="width: 100px;" />
+                        </td>
+                        <td>@cliente.Cedula</td>
+                        <td>@cliente.Nombre @cliente.Apellido</td>
+                        <td>@cliente.Licencia</td>
+                        <td>
+                            <img src="@cliente.FotoLicencia" style="width: 100px;" />
+                        </td>
+                        <td>@cliente.TipoSangre.Nombre</td>
+                        <td>@cliente.Correo</td>
+                        <td>@cliente.Nacionalidad</td>
+                        <td>
+                            @if (cliente.Disponible)
+                            {
+                                <span class="oi oi-check"></span>
+                            }
+                            else
+                            {
+                                <span class="oi oi-x"></span>
+                            }
+                        </td>
+                        <td>
+                            <a href="/gestion_clientes/@cliente.Cedula" class="btn btn-success">Editar</a>
+                            <br />
+                            <button class="btn @(cliente.Disponible ? "btn btn-outline-danger" : "btn btn-outline-warning")"
+                                    @onclick="async () => await DB.SetEstatusCliente(cliente.Cedula)">
+                                @(cliente.Disponible ? "Deshabilitar" : "Habilitar")
+                            </button>
+                        </td>
+                    </tr>
+                </Virtualize>
+            </tbody>
+        </table>
+    </div>
 
-@code {
-    List<Cliente> clientes = new();
+    @code {
+        List<Cliente> clientes = new();
 
-    protected override async Task OnInitializedAsync()
-    {
-        clientes = await DB.GetAllClientes();
+        protected override async Task OnInitializedAsync()
+        {
+            clientes = await DB.GetAllClientes();
+        }
     }
-}

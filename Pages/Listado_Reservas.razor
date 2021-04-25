@@ -1,12 +1,25 @@
 ﻿@page "/listado_reservas"
 @inject IAlquilerService DB
 
-<h3 class="mb-3">Reservas</h3>
+<div class="p-5 text-center bg-transparent font-weight-bolder text-uppercase">
+    <h1 class="mb-3">Reservas</h1>
+</div>
 
-<a href="/gestion_reservas" class="btn btn-primary mb-4">Agregar Reserva</a>
+<div class="text-right">
+    <a href="/gestion_reservas" class="btn btn-outline-success mb-4"><span class="oi oi-plus" aria-hidden="true"></span>  Agregar Reserva</a>
+</div>
 
-<div>
-    <table class="table table-hover">
+<div class="table-responsive-md ">
+    <style>
+        .liltable th {
+            text-align: center;
+        }
+
+        .liltable td {
+            text-align: center;
+        }
+    </style>
+    <table class="liltable table table-hover table-bordered">
         <thead class="thead-light">
             <tr>
                 <th>Vehiculo</th>

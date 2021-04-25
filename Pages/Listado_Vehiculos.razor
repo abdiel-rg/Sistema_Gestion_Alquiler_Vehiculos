@@ -3,12 +3,25 @@
 @inject IAlquilerService DB
 @inject IConfiguration Configuration
 
-<h3 class="mb-3">Vehículos</h3>
+<div class="p-5 text-center bg-transparent font-weight-bolder text-uppercase">
+    <h1 class="mb-3">Vehiculos</h1>
+</div>
 
-<a href="/gestion_vehiculos" class="btn btn-primary mb-4">Agregar Vehiculo</a>
+<div class="text-right">
+    <a href="/gestion_vehiculos" class="btn btn-outline-success mb-4"><span class="oi oi-plus" aria-hidden="true"></span>  Agregar Vehiculo</a>
+</div>
 
-<div>
-    <table class="table table-hover table-bordered">
+<div class="table-responsive-md ">
+    <style>
+        .liltable th {
+            text-align: center;
+        }
+
+        .liltable td {
+            text-align: center;
+        }
+    </style>
+    <table class="liltable table table-hover table-bordered">
         <thead class="thead-light">
             <tr>
                 <th>Marca</th>
@@ -26,7 +39,6 @@
                 <th>Ubicación</th>
                 <th>Cantidad de Reservas</th>
                 <th>Monto Total Recaudado</th>
-                <th></th>
                 <th></th>
             </tr>
         </thead>
@@ -60,25 +72,25 @@
                     <td>@vehiculo.Reservas.Count</td>
                     <td>@vehiculo.Reservas.Sum(r => r.Factura.MontoPagado).ToString("C2")</td>
                     <td>
-                        <a href="/gestion_vehiculos/@vehiculo.ID" class="btn btn-success">Editar</a>
-                    </td>
-                    <td>
-                        <button class="btn @(vehiculo.Habilitado ? "btn btn-danger" : "btn-warning")"
+                        <a href="/gestion_vehiculos/@vehiculo.ID" class="btn btn-outline-info">Editar</a>
+                        <br />
+                        <button class="btn @(vehiculo.Habilitado ? "btn btn-outline-danger" : "btn btn-outline-warning")"
                                 @onclick="async () => await DB.SetEstatusVehiculo(vehiculo.ID)">
                             @(vehiculo.Habilitado ? "Deshabilitar" : "Habilitar")
                         </button>
                     </td>
+
                 </tr>
             </Virtualize>
         </tbody>
     </table>
 </div>
 
-@code {
-    List<Vehiculo> vehiculos = new();
+    @code {
+        List<Vehiculo> vehiculos = new();
 
-    protected override async Task OnInitializedAsync()
-    {
-        vehiculos = await DB.GetAllVehiculos();
+        protected override async Task OnInitializedAsync()
+        {
+            vehiculos = await DB.GetAllVehiculos();
+        }
     }
-}
