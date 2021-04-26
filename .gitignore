@@ -361,6 +361,6 @@ MigrationBackup/
 
 # Fody - auto-generated XML schema
 FodyWeavers.xsd
-Data/gestion_alquiler.db
+gestion_alquiler.db
 ClassDiagram.cd
 ClassDiagram.png
