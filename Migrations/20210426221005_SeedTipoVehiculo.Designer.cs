@@ -9,7 +9,7 @@ using Sistema_Gestion_Alquiler_Vehiculos.Data;
 namespace Sistema_Gestion_Alquiler_Vehiculos.Migrations
 {
     [DbContext(typeof(SGAVContext))]
-    [Migration("20210426215551_SeedTipoVehiculo")]
+    [Migration("20210426221005_SeedTipoVehiculo")]
     partial class SeedTipoVehiculo
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -385,7 +385,7 @@ namespace Sistema_Gestion_Alquiler_Vehiculos.Migrations
                         new
                         {
                             ID = 1,
-                            Nombre = "Automóvil"
+                            Nombre = "Carro"
                         },
                         new
                         {
@@ -395,21 +395,31 @@ namespace Sistema_Gestion_Alquiler_Vehiculos.Migrations
                         new
                         {
                             ID = 3,
-                            Nombre = "Motocicleta"
+                            Nombre = "Camión"
                         },
                         new
                         {
                             ID = 4,
-                            Nombre = "Barco"
+                            Nombre = "Bicicleta"
                         },
                         new
                         {
                             ID = 5,
-                            Nombre = "Avión"
+                            Nombre = "Motocicleta"
                         },
                         new
                         {
                             ID = 6,
+                            Nombre = "Barco"
+                        },
+                        new
+                        {
+                            ID = 7,
+                            Nombre = "Avión"
+                        },
+                        new
+                        {
+                            ID = 8,
                             Nombre = "Cohete"
                         });
                 });

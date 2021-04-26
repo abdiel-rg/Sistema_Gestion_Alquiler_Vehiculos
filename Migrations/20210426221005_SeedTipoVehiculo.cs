@@ -9,7 +9,7 @@ namespace Sistema_Gestion_Alquiler_Vehiculos.Migrations
             migrationBuilder.InsertData(
                 table: "TiposVehiculo",
                 columns: new[] { "ID", "Nombre" },
-                values: new object[] { 1, "Automóvil" });
+                values: new object[] { 1, "Carro" });
 
             migrationBuilder.InsertData(
                 table: "TiposVehiculo",
@@ -19,22 +19,32 @@ namespace Sistema_Gestion_Alquiler_Vehiculos.Migrations
             migrationBuilder.InsertData(
                 table: "TiposVehiculo",
                 columns: new[] { "ID", "Nombre" },
-                values: new object[] { 3, "Motocicleta" });
+                values: new object[] { 3, "Camión" });
 
             migrationBuilder.InsertData(
                 table: "TiposVehiculo",
                 columns: new[] { "ID", "Nombre" },
-                values: new object[] { 4, "Barco" });
+                values: new object[] { 4, "Bicicleta" });
 
             migrationBuilder.InsertData(
                 table: "TiposVehiculo",
                 columns: new[] { "ID", "Nombre" },
-                values: new object[] { 5, "Avión" });
+                values: new object[] { 5, "Motocicleta" });
 
             migrationBuilder.InsertData(
                 table: "TiposVehiculo",
                 columns: new[] { "ID", "Nombre" },
-                values: new object[] { 6, "Cohete" });
+                values: new object[] { 6, "Barco" });
+
+            migrationBuilder.InsertData(
+                table: "TiposVehiculo",
+                columns: new[] { "ID", "Nombre" },
+                values: new object[] { 7, "Avión" });
+
+            migrationBuilder.InsertData(
+                table: "TiposVehiculo",
+                columns: new[] { "ID", "Nombre" },
+                values: new object[] { 8, "Cohete" });
         }
 
         protected override void Down(MigrationBuilder migrationBuilder)
@@ -68,6 +78,16 @@ namespace Sistema_Gestion_Alquiler_Vehiculos.Migrations
                 table: "TiposVehiculo",
                 keyColumn: "ID",
                 keyValue: 6);
+
+            migrationBuilder.DeleteData(
+                table: "TiposVehiculo",
+                keyColumn: "ID",
+                keyValue: 7);
+
+            migrationBuilder.DeleteData(
+                table: "TiposVehiculo",
+                keyColumn: "ID",
+                keyValue: 8);
         }
     }
 }

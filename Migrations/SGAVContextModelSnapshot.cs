@@ -383,7 +383,7 @@ namespace Sistema_Gestion_Alquiler_Vehiculos.Migrations
                         new
                         {
                             ID = 1,
-                            Nombre = "Automóvil"
+                            Nombre = "Carro"
                         },
                         new
                         {
@@ -393,21 +393,31 @@ namespace Sistema_Gestion_Alquiler_Vehiculos.Migrations
                         new
                         {
                             ID = 3,
-                            Nombre = "Motocicleta"
+                            Nombre = "Camión"
                         },
                         new
                         {
                             ID = 4,
-                            Nombre = "Barco"
+                            Nombre = "Bicicleta"
                         },
                         new
                         {
                             ID = 5,
-                            Nombre = "Avión"
+                            Nombre = "Motocicleta"
                         },
                         new
                         {
                             ID = 6,
+                            Nombre = "Barco"
+                        },
+                        new
+                        {
+                            ID = 7,
+                            Nombre = "Avión"
+                        },
+                        new
+                        {
+                            ID = 8,
                             Nombre = "Cohete"
                         });
                 });
