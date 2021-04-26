@@ -22,6 +22,7 @@ namespace Sistema_Gestion_Alquiler_Vehiculos
             {
                 var db = scope.ServiceProvider.GetRequiredService<SGAVContext>();
                 db.Database.Migrate();
+                db.Database.EnsureCreated();
             }
 
             host.Run();
