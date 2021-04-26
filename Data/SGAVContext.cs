@@ -39,6 +39,15 @@ namespace Sistema_Gestion_Alquiler_Vehiculos.Data
                 new TipoSangre() { ID = 7, Nombre = "AB-" },
                 new TipoSangre() { ID = 8, Nombre = "AB+" }
             );
+
+            builder.Entity<TipoVehiculo>().HasData(
+                new TipoVehiculo() { ID = 1, Nombre = "Automóvil" },
+                new TipoVehiculo() { ID = 2, Nombre = "Camioneta" },
+                new TipoVehiculo() { ID = 3, Nombre = "Motocicleta" },
+                new TipoVehiculo() { ID = 4, Nombre = "Barco" },
+                new TipoVehiculo() { ID = 5, Nombre = "Avión" },
+                new TipoVehiculo() { ID = 6, Nombre = "Cohete" }
+            );
         }
 
     }
