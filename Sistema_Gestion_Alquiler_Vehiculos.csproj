@@ -3,6 +3,7 @@
   <PropertyGroup>
     <TargetFramework>net5.0</TargetFramework>
     <UserSecretsId>aspnet-Sistema_Gestion_Alquiler_Vehiculos-BF352177-0ABB-4B47-B20D-FA3461B6BD44</UserSecretsId>
+    <EnvironmentName>Development</EnvironmentName>
   </PropertyGroup>
 
   <ItemGroup>
